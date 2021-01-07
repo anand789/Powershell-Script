@@ -1,0 +1,9 @@
+#1) Create Text File using Ansible:
+#==================================
+---
+- hosts: webservers
+  tasks:
+  - name: Copy file to a remote server
+    copy:
+     src: /home/ansadmin/f1.txt
+     dest: /home/ansadmin/f1.txt
