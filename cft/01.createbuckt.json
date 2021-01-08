@@ -1,0 +1,21 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Resources":{
+		"BlockName":{
+			"Type":"AWS::S3::Bucket",
+			"Properties":{
+				"BucketName":"YOURBUCKETNAME",
+				"Tags":[
+				{
+					"Key":"Project",
+					"Value":"Abc"
+				},
+				{
+					"Key":"Env",
+					"Value":"Dev"
+				}	
+				]
+			}
+		}
+	}
+}
