@@ -24,7 +24,8 @@
 					"Fn::FindInMap":[
 						"MyRegionMap",{
 							"Ref":"AWS::Region"
-						}
+						},
+						"AMI"
 					]
 				},
 				"InstanceType":"t2.micro",
