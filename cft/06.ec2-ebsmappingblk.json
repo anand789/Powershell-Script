@@ -41,8 +41,8 @@
 							"DeleteOnTermination":"true",
 							"VolumeSize":"9"
 						}
-					},
-				]
+					}
+				],
                 "KeyName": {
                     "Ref": "InputKeyName"
                 },
