@@ -1,0 +1,94 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+	"Mappings":{
+		"MyRegionMap":{
+			"us-east-1":{
+				"AMI":"ami-0be2609ba883822ec",
+				"Key2":"abc"
+			},
+			"ap-south-1":{
+				"AMI":"ami-04b1ddd35fd71475a"
+			},
+			"us-west-1": {
+				"AMI": "ami-655a0a20"
+			},
+			"eu-west-1": {
+				"AMI": "ami-7fd4e10b"
+			}
+		}
+	},
+    "Resources": {
+        "webserver": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": {
+					"Fn::FindInMap":[
+						"MyRegionMap",{
+							"Ref":"AWS::Region"
+						},"AMI"
+					]
+				},
+				"InstanceType":"t2.micro",
+				"BlockDeviceMappings":[
+					{
+						"DeviceName":"/dev/sda1",
+						"Ebs":{"VolumeSize":"9"}
+					},
+					{
+						"DeviceName":"/dev/sdm",
+						"Ebs":{
+							"VolumeType":"gp2",
+							"DeleteOnTermination":"true",
+							"VolumeSize":"9"
+						}
+					},
+				]
+                "KeyName": {
+                    "Ref": "InputKeyName"
+                },
+				"SecurityGroups": [
+					{
+						"Ref": "CreateAllTrafficSG"
+					}
+				]
+            }
+        },
+		"CreateAllTrafficSG":{
+			"Type":"AWS::EC2::SecurityGroup",
+			"Properties":{
+				"GroupDescription":"Enable SSH Access via port 22",
+				"SecurityGroupIngress":[
+					{
+						"IpProtocol":"tcp",
+						"FromPort":"22",
+						"ToPort":"22",
+						"CidrIp":"0.0.0.0/0"
+					}
+				]
+			}
+		}
+    },
+    "Parameters": {
+        "InputKeyName": {
+            "Description": "Enter Already Created Key Name",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "ConstraintDescription": "Without Entering Keyname you cannot proceed further"
+        },
+		"ApplicationPassword":{
+			"Default":"mujahed",
+			"NoEcho":"true",
+			"Description":"Enter Application Database Password",
+			"Type":"String",
+			"MinLength":"5",
+			"MaxLength":"20",
+			"AllowedPattern":"[a-zA-Z][a-zA-Z0-9]*"
+		},
+		"WebServerPort":{
+			"Default":"8888",
+			"Description": "Enter Port Number",
+			"Type":"Number",
+			"MinValue":"1",
+			"MaxValue":"65535"
+		}
+    }
+}
